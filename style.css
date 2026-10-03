@@ -22,16 +22,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .app-container {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px 10px;
 }
 
 /* Glassmorphism Panels */
@@ -44,6 +46,8 @@ body {
     padding: 2.5rem;
     width: 90%;
     max-width: 600px;
+    max-height: 95vh;
+    overflow-y: auto;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     z-index: 10;
@@ -213,7 +217,7 @@ button:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background: linear-gradient(to bottom, #192a56, #2f3640);
