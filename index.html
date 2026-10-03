@@ -38,6 +38,14 @@
             </div>
 
             <div class="mode-selector">
+                <h3>Platform</h3>
+                <div class="mode-buttons">
+                    <button class="platform-btn active" id="btn-web" data-platform="web">Web (Keyboard)</button>
+                    <button class="platform-btn" id="btn-mobile" data-platform="mobile">Mobile (Touch)</button>
+                </div>
+            </div>
+
+            <div class="mode-selector">
                 <h3>Game Mode</h3>
                 <div class="mode-buttons">
                     <button class="mode-btn active" id="btn-together" data-mode="together">Play Together</button>
@@ -72,6 +80,11 @@
             <div class="controls-hint">
                 <span id="hint-p1">P1: Jump with <b>W</b></span>
                 <span id="hint-p2">P2: Jump with <b>Up Arrow</b></span>
+            </div>
+
+            <div id="mobile-controls" class="hidden">
+                <button id="p1-jump-btn" class="mobile-btn">P1 Jump</button>
+                <button id="p2-jump-btn" class="mobile-btn">P2 Jump</button>
             </div>
         </div>
 

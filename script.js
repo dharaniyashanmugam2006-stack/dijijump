@@ -21,12 +21,18 @@ const p2NameDisplay = document.getElementById('p2-name-display');
 
 // Buttons
 const modeBtns = document.querySelectorAll('.mode-btn');
+const platformBtns = document.querySelectorAll('.platform-btn');
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const menuBtn = document.getElementById('menu-btn');
+const mobileControls = document.getElementById('mobile-controls');
+const p1JumpBtn = document.getElementById('p1-jump-btn');
+const p2JumpBtn = document.getElementById('p2-jump-btn');
+const controlsHint = document.querySelector('.controls-hint');
 
 // Game State
 let gameState = {
+    platform: 'web', // 'web' or 'mobile'
     mode: 'together', // 'together' or 'turn'
     activePlayer: 'both', // 'both', 'p1', or 'p2'
     isGameOver: false,
@@ -64,11 +70,27 @@ modeBtns.forEach(btn => btn.addEventListener('click', (e) => {
     gameState.mode = btn.dataset.mode;
 }));
 
+platformBtns.forEach(btn => btn.addEventListener('click', (e) => {
+    platformBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    gameState.platform = btn.dataset.platform;
+}));
+
 startBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', resetGame);
 menuBtn.addEventListener('click', goToMenu);
 
 document.addEventListener('keydown', handleInput);
+
+// Mobile touch listeners
+const jumpP1 = (e) => { e.preventDefault(); handleJump('p1'); };
+const jumpP2 = (e) => { e.preventDefault(); handleJump('p2'); };
+
+p1JumpBtn.addEventListener('touchstart', jumpP1, {passive: false});
+p1JumpBtn.addEventListener('mousedown', jumpP1);
+
+p2JumpBtn.addEventListener('touchstart', jumpP2, {passive: false});
+p2JumpBtn.addEventListener('mousedown', jumpP2);
 
 // --- Game Logic ---
 
@@ -92,6 +114,14 @@ function startGame() {
     startMenu.classList.add('hidden');
     gameOverMenu.classList.add('hidden');
     gameContainer.classList.remove('hidden');
+    
+    if (gameState.platform === 'mobile') {
+        mobileControls.classList.remove('hidden');
+        controlsHint.classList.add('hidden');
+    } else {
+        mobileControls.classList.add('hidden');
+        controlsHint.classList.remove('hidden');
+    }
     
     if (gameState.mode === 'turn') {
         gameState.activePlayer = 'p1';
@@ -141,16 +171,23 @@ function initGameLoop() {
 }
 
 function handleInput(e) {
-    if (gameState.isGameOver) return;
+    if (e.code === 'KeyW' || e.code === 'Space') {
+        handleJump('p1');
+    }
+    if (e.code === 'ArrowUp') {
+        handleJump('p2');
+    }
+}
+
+function handleJump(player) {
+    if (gameState.isGameOver || gameState.isPaused) return;
     
-    // Player 1: W or Space
-    if ((e.code === 'KeyW' || e.code === 'Space') && p1State.active && !p1State.isJumping) {
+    if (player === 'p1' && p1State.active && !p1State.isJumping) {
         p1State.velocityY = jumpPower;
         p1State.isJumping = true;
     }
     
-    // Player 2: Arrow Up
-    if (e.code === 'ArrowUp' && p2State.active && !p2State.isJumping) {
+    if (player === 'p2' && p2State.active && !p2State.isJumping) {
         p2State.velocityY = jumpPower;
         p2State.isJumping = true;
     }
